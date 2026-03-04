@@ -1,23 +1,75 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import HomeScreen from "./HomeScreen";
-import BoothScreen from "./BoothScreen";
-import CameraScreen from "./CameraScreen";
-// import ThemesScreen from "./ThemesScreen";
-import GalleryScreen from "./GalleryScreen";
+import { useState } from 'react';
+import PhotoCountSelector from './components/PhotoCountSelector';
+import ThemeSelector from './components/ThemeSelector';
+import CameraView from './components/CameraView';
+import PhotoPreview from './components/PhotoPreview';
+import './App.css';
 
 function App() {
+  const [step, setStep] = useState('count'); // count -> theme -> camera -> preview
+  const [photoCount, setPhotoCount] = useState(4);
+  const [theme, setTheme] = useState('classic');
+  const [capturedPhotos, setCapturedPhotos] = useState([]);
+
+  const handleCountSelect = (count) => {
+    setPhotoCount(count);
+    setStep('theme');
+  };
+
+  const handleThemeSelect = (selectedTheme) => {
+    setTheme(selectedTheme);
+    setStep('camera');
+  };
+
+  const handlePhotosCaptured = (photos) => {
+    setCapturedPhotos(photos);
+    setStep('preview');
+  };
+
+  const handleRetake = () => {
+    setCapturedPhotos([]);
+    setStep('camera');
+  };
+
+  const handleStartOver = () => {
+    setCapturedPhotos([]);
+    setPhotoCount(4);
+    setTheme('classic');
+    setStep('count');
+  };
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomeScreen />} />
-        <Route path="/booth" element={<BoothScreen />} />
-        <Route path="/camera" element={<CameraScreen />} />
-        {/* <Route path="/themes" element={<ThemesScreen />} /> */}
-        <Route path="/gallery" element={<GalleryScreen />} />
-      </Routes>
-    </BrowserRouter>
+    <div className="app">
+      {step === 'count' && (
+        <PhotoCountSelector onSelect={handleCountSelect} />
+      )}
+      
+      {step === 'theme' && (
+        <ThemeSelector 
+          onSelect={handleThemeSelect}
+          onBack={() => setStep('count')}
+        />
+      )}
+      
+      {step === 'camera' && (
+        <CameraView 
+          photoCount={photoCount}
+          theme={theme}
+          onComplete={handlePhotosCaptured}
+          onBack={() => setStep('theme')}
+        />
+      )}
+      
+      {step === 'preview' && (
+        <PhotoPreview 
+          photos={capturedPhotos}
+          theme={theme}
+          onRetake={handleRetake}
+          onStartOver={handleStartOver}
+        />
+      )}
+    </div>
   );
 }
 
 export default App;
-
