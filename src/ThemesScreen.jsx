@@ -1,9 +1,12 @@
-// function BoothScreen() {
-//   return (
-//     <div>
-//       <h2>Booth Screen (Session Settings will go here)</h2>
-//     </div>
-//   );
-// }
+import React from 'react';
 
-// export default ThemesScreen;
+function ThemesScreen() {
+  return (
+    <div className="themes-screen">
+      <h1>Themes</h1>
+      <p>Choose a theme for your photo session.</p>
+    </div>
+  );
+}
+
+export default ThemesScreen;

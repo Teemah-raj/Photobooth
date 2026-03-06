@@ -1,32 +1,29 @@
-import { Camera } from 'lucide-react';
+import React, { useState } from 'react';
+import { FileImage } from 'lucide-react';
 
-function PhotoCountSelector({ onSelect }) {
-    const options = [1, 2, 3, 4];
+function PhotoCountSelector({ onSelect, selectedCount }) {
+  const options = [1, 3, 4, 6];
 
-    return (
-        <div className="screen">
-        <div className="container">
-            <Camera size={64} className="icon" />
-            <h1>How many photos?</h1>
-            <p className="subtitle">Select the number of photos for your strip</p>
-        
-            <div className="photo-count-grid">
-                {options.map(count => (
-                    <button 
-                        key={count}
-                        className="count-button"
-                        onClick={() => onSelect(count)}
-                    >
-                        <div className="count-number">{count}</div>
-                        <div className="count-label">
-                            {count === 1 ? 'Photo' : 'Photos'}
-                        </div>
-                    </button>
-                ))}
-            </div>
-        </div>
+  return (
+    <div className="session-settings-container">
+      <div className="setting-header">
+        <FileImage size={20} className="icon" />
+        <h3 className="setting-title">PHOTOS</h3>
+      </div>
+      <div className="selector-buttons">
+        {options.map(count => (
+          <button
+            key={count}
+            className={`selector-button ${selectedCount === count ? 'selected' : ''}`}
+            onClick={() => onSelect(count)}
+          >
+            {count}
+          </button>
+        ))}
+      </div>
     </div>
-);
+  );
 }
+
 
 export default PhotoCountSelector;

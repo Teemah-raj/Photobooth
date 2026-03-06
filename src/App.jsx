@@ -1,74 +1,27 @@
-import { useState } from 'react';
-import PhotoCountSelector from './components/PhotoCountSelector';
-import ThemeSelector from './components/ThemeSelector';
-import CameraView from './components/CameraView';
-import PhotoPreview from './components/PhotoPreview';
+import React from 'react';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import HomeScreen from './HomeScreen';
+import ThemesScreen from './ThemesScreen';
+import CameraScreen from './CameraScreen';
+import GalleryScreen from './GalleryScreen';
+import Navbar from './Navbar';
 import './App.css';
 
 function App() {
-  const [step, setStep] = useState('count'); // count -> theme -> camera -> preview
-  const [photoCount, setPhotoCount] = useState(4);
-  const [theme, setTheme] = useState('classic');
-  const [capturedPhotos, setCapturedPhotos] = useState([]);
-
-  const handleCountSelect = (count) => {
-    setPhotoCount(count);
-    setStep('theme');
-  };
-
-  const handleThemeSelect = (selectedTheme) => {
-    setTheme(selectedTheme);
-    setStep('camera');
-  };
-
-  const handlePhotosCaptured = (photos) => {
-    setCapturedPhotos(photos);
-    setStep('preview');
-  };
-
-  const handleRetake = () => {
-    setCapturedPhotos([]);
-    setStep('camera');
-  };
-
-  const handleStartOver = () => {
-    setCapturedPhotos([]);
-    setPhotoCount(4);
-    setTheme('classic');
-    setStep('count');
-  };
-
   return (
-    <div className="app">
-      {step === 'count' && (
-        <PhotoCountSelector onSelect={handleCountSelect} />
-      )}
-      
-      {step === 'theme' && (
-        <ThemeSelector 
-          onSelect={handleThemeSelect}
-          onBack={() => setStep('count')}
-        />
-      )}
-      
-      {step === 'camera' && (
-        <CameraView 
-          photoCount={photoCount}
-          theme={theme}
-          onComplete={handlePhotosCaptured}
-          onBack={() => setStep('theme')}
-        />
-      )}
-      
-      {step === 'preview' && (
-        <PhotoPreview 
-          photos={capturedPhotos}
-          theme={theme}
-          onRetake={handleRetake}
-          onStartOver={handleStartOver}
-        />
-      )}
-    </div>
+    <Router>
+      <div className="app-container">
+        <main className="main-content">
+          <Routes>
+            <Route path="/" element={<HomeScreen />} />
+            <Route path="/themes" element={<ThemesScreen />} />
+            <Route path="/booth" element={<CameraScreen />} />
+            <Route path="/gallery" element={<GalleryScreen />} />
+          </Routes>
+        </main>
+        <Navbar />
+      </div>
+    </Router>
   );
 }
 

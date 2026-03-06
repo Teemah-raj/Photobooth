@@ -1,43 +1,33 @@
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import SessionSettings from './SessionSettings';
+import { Camera } from 'lucide-react';
 
 function HomeScreen() {
   const navigate = useNavigate();
+  const [settings, setSettings] = useState({
+    photos: 4,
+    timer: 3,
+    format: 'Portrait'
+  });
+
+  const handleStartSession = () => {
+    navigate('/booth', { state: { settings } });
+  };
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>📸 Vintage Booth</h1>
-      <p style={styles.subtitle}>Capture moments in timeless style</p>
-
-      <button style={styles.button} onClick={() => navigate("/booth")}>
-        Start Session
-      </button>
-
-      <div style={styles.navbar}>
-        <button onClick={() => navigate("/")}>Home</button>
-        {/* <button onClick={() => navigate("/themes")}>Themes</button> */}
-        <button onClick={() => navigate("/booth")}>Booth</button>
-        <button onClick={() => navigate("/gallery")}>Gallery</button>
+    <div className="home-screen">
+      <div className="main-title-container">
+        <Camera size={48} className="icon" />
+        <h1 className="main-title">Vintage Booth</h1>
+        <p className="subtitle">Capture moments in timeless style.</p>
       </div>
+      <SessionSettings settings={settings} onUpdate={setSettings} />
+      <button className="start-session-button" onClick={handleStartSession}>
+        START SESSION
+      </button>
     </div>
   );
 }
-
-const styles = {
-  container: { textAlign: "center", marginTop: "50px" },
-  title: { fontSize: "2rem", fontWeight: "bold" },
-  subtitle: { fontSize: "1rem", color: "#555" },
-  button: {
-    marginTop: "20px",
-    padding: "10px 20px",
-    fontSize: "1rem",
-    cursor: "pointer",
-  },
-  navbar: {
-    marginTop: "40px",
-    display: "flex",
-    gap: "15px",
-    justifyContent: "center",
-  },
-};
 
 export default HomeScreen;

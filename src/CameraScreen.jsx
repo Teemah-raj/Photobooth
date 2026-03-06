@@ -1,8 +1,14 @@
 import { useState, useEffect, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function CameraScreen() {
+  const location = useLocation();
+  const navigate = useNavigate();
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+
+  // Get settings from location state or use defaults
+  const sessionSettings = location.state?.settings || { photos: 4, timer: 3, format: 'Portrait' };
 
   const [photos, setPhotos] = useState([]);
   const [notes, setNotes] = useState({});
@@ -12,25 +18,56 @@ function CameraScreen() {
   const [showShareModal, setShowShareModal] = useState(false);
   const [shareStep, setShareStep] = useState("options"); // options | resolution | socials
 
-  const sessionSettings = { photos: 4, timer: 3 };
+  const [cameraError, setCameraError] = useState(null);
+  const [isCameraReady, setIsCameraReady] = useState(false);
 
   useEffect(() => {
+    let stream = null;
     async function startCamera() {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
+        setIsCameraReady(false);
+        setCameraError(null);
+        
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            width: { ideal: 1280 },
+            height: { ideal: 720 },
+            facingMode: "user"
+          },
+          audio: false
         });
-        videoRef.current.srcObject = stream;
+
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          videoRef.current.onloadedmetadata = () => {
+            setIsCameraReady(true);
+          };
+        }
       } catch (err) {
-        console.error("Camera error:", err);
+        console.error("Camera access error:", err);
+        setCameraError(err.message || "Could not access camera. Please ensure you have given permission.");
       }
     }
     startCamera();
+
+    return () => {
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+    };
   }, []);
 
   const capturePhoto = (index = null) => {
     const context = canvasRef.current.getContext("2d");
-    context.drawImage(videoRef.current, 0, 0, 320, 240);
+    
+    // Set canvas dimensions based on format
+    const width = sessionSettings.format === 'Landscape' ? 480 : 320;
+    const height = sessionSettings.format === 'Landscape' ? 360 : 480;
+    
+    canvasRef.current.width = width;
+    canvasRef.current.height = height;
+    
+    context.drawImage(videoRef.current, 0, 0, width, height);
     const imageData = canvasRef.current.toDataURL("image/png");
 
     setPhotos((prev) => {
@@ -84,22 +121,24 @@ function CameraScreen() {
     const ctx = collage.getContext("2d");
 
     let width, height;
+    const isLandscape = sessionSettings.format === 'Landscape';
+
     switch (resolution) {
       case 480:
         width = 480;
-        height = 360;
+        height = isLandscape ? 360 : 640;
         break;
       case 720:
         width = 720;
-        height = 540;
+        height = isLandscape ? 540 : 960;
         break;
       case 1080:
         width = 1080;
-        height = 810;
+        height = isLandscape ? 810 : 1440;
         break;
       default:
-        width = 320;
-        height = 240;
+        width = isLandscape ? 480 : 320;
+        height = isLandscape ? 360 : 480;
     }
 
     if (layout === "strip") {
@@ -228,26 +267,59 @@ function CameraScreen() {
     );
   }
 
-  // Default: camera phase
   return (
-    <div style={styles.container}>
-      <h1>Camera Booth</h1>
-      <video ref={videoRef} autoPlay playsInline style={styles.video}></video>
+    <div className="camera-screen-container">
+      <div className="camera-header">
+        <h1>Camera Booth</h1>
+        <div className="session-info">
+          <span>{sessionSettings.photos} Photos</span>
+          <span>•</span>
+          <span>{sessionSettings.timer}s Timer</span>
+          <span>•</span>
+          <span>{sessionSettings.format}</span>
+        </div>
+      </div>
+      
+      <div className="camera-view">
+        {!isCameraReady && !cameraError && (
+          <div className="camera-loading">
+            <div className="spinner"></div>
+            <p>Initializing camera...</p>
+          </div>
+        )}
+        
+        {cameraError && (
+          <div className="camera-error">
+            <p>⚠️ {cameraError}</p>
+            <button onClick={() => window.location.reload()}>Retry Access</button>
+          </div>
+        )}
+
+        <video 
+          ref={videoRef} 
+          autoPlay 
+          playsInline 
+          className={`camera-video ${isCameraReady ? 'ready' : ''}`}
+        ></video>
+        {countdown !== null && <div className="countdown-overlay">{countdown}</div>}
+      </div>
+
       <canvas
         ref={canvasRef}
-        width="320"
-        height="240"
         style={{ display: "none" }}
       ></canvas>
 
-      {countdown !== null && <h2>{countdown}</h2>}
+      <div className="camera-controls">
+        <button 
+          className="capture-button" 
+          onClick={startCountdown}
+          disabled={photos.length >= sessionSettings.photos}
+        >
+          {photos.length >= sessionSettings.photos ? 'Ready to Develop' : `Take Photo (${photos.length}/${sessionSettings.photos})`}
+        </button>
+      </div>
 
-      <button style={styles.button} onClick={startCountdown}>
-        Take Photo ({photos.length}/{sessionSettings.photos})
-      </button>
-
-      {/* Gallery with retake + note options */}
-      <div style={styles.gallery}>
+      <div className="photos-strip">
         {photos.map((src, i) => (
           <div key={i} style={styles.photoBox}>
             <img src={src} alt={`photo-${i}`} style={styles.photo} />

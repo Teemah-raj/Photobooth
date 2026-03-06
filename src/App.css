@@ -1,42 +1,308 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/* General Styles */
+body {
+  background-color: #edebe6;
+  color: #5d4037;
+  font-family: 'serif';
+  margin: 0;
+  padding: 0;
+}
+
+.home-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.main-title-container {
   text-align: center;
+  margin-bottom: 2rem;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.main-title {
+  font-size: 4rem;
+  font-weight: bold;
+  margin: 0;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.subtitle {
+  font-size: 1.2rem;
+  margin-top: 0.5rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+/* Session Settings */
+.session-settings-card {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
 }
 
-.card {
-  padding: 2em;
+.session-settings-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
-.read-the-docs {
-  color: #888;
+.session-settings-header .icon {
+  margin-right: 0.5rem;
 }
+
+.session-settings-header h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.session-settings-body {
+  display: flex;
+  gap: 1rem;
+}
+
+.session-settings-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.setting-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.setting-header .icon {
+  margin-right: 0.5rem;
+}
+
+.setting-title {
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.selector-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.selector-button {
+  background-color: #f0e5d1;
+  border: 1px solid #d3c5a9;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s;
+}
+
+.selector-button.selected {
+  background-color: #d3b87d;
+  color: #fff;
+  border-color: #b89e6a;
+}
+
+/* Start Session Button */
+.start-session-button {
+  background-color: #5d4037;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.start-session-button:hover {
+  background-color: #4e342e;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding-bottom: 80px; /* Space for the bottom navbar */
+}
+
+.bottom-navbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  background-color: #4e342e;
+  padding: 0.5rem 0;
+  z-index: 1000;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.8rem;
+}
+
+.nav-item.active {
+  color: #d3b87d;
+}
+
+/* Camera Screen */
+.camera-screen-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background-color: #fdf6e3;
+  min-height: 100vh;
+}
+
+.camera-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.session-info {
+  display: flex;
+  gap: 0.5rem;
+  color: #8d6e63;
+  font-size: 0.9rem;
+}
+
+.camera-view {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  aspect-ratio: 4/3;
+  background-color: #000;
+  border: 8px solid #5d4037;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.camera-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1); /* Mirror camera */
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.camera-video.ready {
+  opacity: 1;
+}
+
+.camera-loading, .camera-error {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #2b2b2b;
+  color: #fff;
+  z-index: 10;
+  text-align: center;
+  padding: 1rem;
+}
+
+.camera-error button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #d3b87d;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.countdown-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 8rem;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+
+.camera-controls {
+  margin-top: 2rem;
+}
+
+.capture-button {
+  background-color: #d3b87d;
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 1rem 3rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(211, 184, 125, 0.4);
+  transition: all 0.2s;
+}
+
+.capture-button:hover:not(:disabled) {
+  background-color: #c4a76a;
+  transform: translateY(-2px);
+}
+
+.capture-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.photos-strip {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.photo-box {
+  position: relative;
+}
+
+.photo-box img {
+  width: 100px;
+  height: 75px;
+  object-fit: cover;
+  border: 2px solid #eee;
+  border-radius: 4px;
+}
+
