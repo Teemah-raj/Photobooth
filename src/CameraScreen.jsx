@@ -317,6 +317,11 @@ function CameraScreen() {
         >
           {photos.length >= sessionSettings.photos ? 'Ready to Develop' : `Take Photo (${photos.length}/${sessionSettings.photos})`}
         </button>
+        {photos.length > 0 && (
+          <button className="retake-all-button" onClick={retakeAll}>
+            Retake All
+          </button>
+        )}
       </div>
 
       <div className="photos-strip">
@@ -332,9 +337,8 @@ function CameraScreen() {
       </div>
 
       {photos.length > 0 && (
-        <div style={styles.actionsRow}>
-          <button onClick={retakeAll}>Retake All</button>
-          <button onClick={developPhotos}>Develop Photos</button>
+        <div className="camera-footer">
+          <button className="develop-button" onClick={developPhotos}>Develop Photos</button>
         </div>
       )}
     </div>

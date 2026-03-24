@@ -156,7 +156,28 @@ body {
   color: #d3b87d;
 }
 
-/* Camera Screen */
+.camera-footer {
+  margin-top: 2rem;
+  margin-bottom: 4rem;
+}
+
+.develop-button {
+  background-color: #5d4037;
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 1rem 3rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(93, 64, 55, 0.4);
+  transition: all 0.2s;
+}
+
+.develop-button:hover {
+  background-color: #4e342e;
+  transform: translateY(-2px);
+}
 .camera-screen-container {
   display: flex;
   flex-direction: column;
@@ -258,6 +279,9 @@ body {
 
 .camera-controls {
   margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
 }
 
 .capture-button {
@@ -271,6 +295,23 @@ body {
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(211, 184, 125, 0.4);
   transition: all 0.2s;
+}
+
+.retake-all-button {
+  background-color: transparent;
+  color: #5d4037;
+  border: 2px solid #5d4037;
+  border-radius: 50px;
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.retake-all-button:hover {
+  background-color: #5d4037;
+  color: #fff;
 }
 
 .capture-button:hover:not(:disabled) {
