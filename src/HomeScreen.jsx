@@ -3,16 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import SessionSettings from './SessionSettings';
 import { Camera } from 'lucide-react';
 
-function HomeScreen() {
+function HomeScreen({ settings, setSettings }) {
   const navigate = useNavigate();
-  const [settings, setSettings] = useState({
-    photos: 4,
-    timer: 3,
-    format: 'Portrait'
-  });
 
   const handleStartSession = () => {
-    navigate('/booth', { state: { settings } });
+    navigate('/booth');
   };
 
   return (

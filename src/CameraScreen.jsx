@@ -1,14 +1,23 @@
 import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-function CameraScreen() {
-  const location = useLocation();
+function CameraScreen({ settings }) {
   const navigate = useNavigate();
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
-  // Get settings from location state or use defaults
-  const sessionSettings = location.state?.settings || { photos: 4, timer: 3, format: 'Portrait' };
+  // Get settings from props
+  const sessionSettings = settings || { photos: 4, timer: 3, format: 'Portrait', theme: 'Vintage' };
+
+  const themeFilters = {
+    'Vintage': 'sepia(0.3) contrast(1.1) brightness(0.9)',
+    'Black & White': 'grayscale(1) contrast(1.2)',
+    'Sepia': 'sepia(1) contrast(0.9)',
+    'Modern': 'saturate(1.2) contrast(1.05)',
+    'Cyberpunk': 'hue-rotate(280deg) saturate(1.5)',
+  };
+
+  const activeFilter = themeFilters[sessionSettings.theme] || 'none';
 
   const [photos, setPhotos] = useState([]);
   const [notes, setNotes] = useState({});
@@ -66,6 +75,9 @@ function CameraScreen() {
     
     canvasRef.current.width = width;
     canvasRef.current.height = height;
+    
+    // Apply theme filter to canvas
+    context.filter = activeFilter;
     
     context.drawImage(videoRef.current, 0, 0, width, height);
     const imageData = canvasRef.current.toDataURL("image/png");
@@ -300,6 +312,7 @@ function CameraScreen() {
           autoPlay 
           playsInline 
           className={`camera-video ${isCameraReady ? 'ready' : ''}`}
+          style={{ filter: activeFilter }}
         ></video>
         {countdown !== null && <div className="countdown-overlay">{countdown}</div>}
       </div>
