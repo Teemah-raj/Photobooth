@@ -339,6 +339,133 @@ body {
   position: relative;
 }
 
+/* Photobooth Slot Design */
+.photobooth-machine {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #edebe6;
+  padding: 2rem;
+}
+
+.booth-front {
+  position: relative;
+  width: 100%;
+  max-width: 450px;
+  height: 550px;
+  background: #3d2b1f; /* Rich wood brown */
+  background-image: linear-gradient(rgba(0,0,0,0.1) 50%, transparent 50%),
+                    linear-gradient(90deg, rgba(0,0,0,0.1) 50%, transparent 50%);
+  background-size: 4px 4px;
+  border: 12px solid #2b1d12;
+  border-radius: 4px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.6), 
+              inset 0 0 100px rgba(0,0,0,0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 80px;
+  overflow: hidden;
+}
+
+.booth-slot-container {
+  position: relative;
+  width: 240px;
+  height: 15px;
+  background: #000;
+  border-radius: 2px;
+  box-shadow: inset 0 2px 10px rgba(0,0,0,1);
+  margin-top: auto;
+}
+
+.booth-slot-trim {
+  position: absolute;
+  top: -8px;
+  left: -10px;
+  right: -10px;
+  bottom: -8px;
+  border: 4px solid #b89e6a; /* Brass/Gold trim */
+  border-radius: 4px;
+  background: linear-gradient(to bottom, #d3b87d, #b89e6a);
+  z-index: -1;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.printing-strip {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;
+  background: white;
+  padding: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  animation: print-out 4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  z-index: 1;
+}
+
+.developing-strip {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;
+  height: 400px;
+  background: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: print-out-partial 3s linear infinite;
+}
+
+@keyframes print-out-partial {
+  0% { transform: translateX(-50%) translateY(100%); }
+  50% { transform: translateX(-50%) translateY(50%); }
+  100% { transform: translateX(-50%) translateY(100%); }
+}
+
+@keyframes print-out {
+  0% { transform: translateX(-50%) translateY(100%); }
+  100% { transform: translateX(-50%) translateY(10%); }
+}
+
+.photo-strip-result {
+  background: white;
+  padding: 15px;
+  width: 220px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.photo-strip-image {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  border: 2px solid #f0f0f0;
+}
+
+.booth-label {
+  position: absolute; 
+  top: 40px;
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  color: #d3b87d;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.result-actions {
+  margin-top: 3rem;
+  display: flex;
+  gap: 1.5rem;
+}
+
 /* Themes Screen */
 .themes-screen-container {
   padding: 4rem 2rem;

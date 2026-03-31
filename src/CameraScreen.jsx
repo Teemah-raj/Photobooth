@@ -195,9 +195,15 @@ function CameraScreen({ settings }) {
   // --- Render phases ---
   if (phase === "developing") {
     return (
-      <div style={styles.developing}>
-        <div style={styles.developingBox}>
-          <h2>Applying chemicals...</h2>
+      <div className="photobooth-machine">
+        <div className="booth-front">
+          <div className="booth-label">Developing</div>
+          <div className="booth-slot-container">
+            <div className="booth-slot-trim"></div>
+            <div className="developing-strip">
+              <div className="spinner"></div>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -205,23 +211,29 @@ function CameraScreen({ settings }) {
 
   if (phase === "result") {
     return (
-      <div style={styles.container}>
-        <h1>Your Keepsake</h1>
-        <div style={layout === "strip" ? styles.strip : styles.grid}>
-          {photos.map((src, i) => (
-            <div key={i} style={styles.photoBox}>
-              <img src={src} alt={`photo-${i}`} style={styles.photo} />
-              {notes[i] && <p style={styles.note}>{notes[i]}</p>}
+      <div className="photobooth-machine">
+        <div className="booth-front">
+          <div className="booth-label">Vintage Booth</div>
+          <div className="booth-slot-container">
+            <div className="booth-slot-trim"></div>
+            <div className="printing-strip">
+              <div className="photo-strip-result">
+                {photos.map((src, i) => (
+                  <img key={i} src={src} alt={`photo-${i}`} className="photo-strip-image" />
+                ))}
+              </div>
             </div>
-          ))}
+          </div>
         </div>
-        <div style={styles.toggle}>
-          <button onClick={() => setLayout("strip")}>Photo Strip</button>
-          <button onClick={() => setLayout("grid")}>Grid</button>
+        
+        <div className="result-actions">
+          <button className="start-session-button" onClick={() => setShowShareModal(true)}>
+            SAVE & SHARE
+          </button>
+          <button className="retake-all-button" onClick={retakeAll}>
+            NEW SESSION
+          </button>
         </div>
-        <button style={styles.button} onClick={() => setShowShareModal(true)}>
-          Save & Share
-        </button>
 
         {/* Share Modal */}
         {showShareModal && (
