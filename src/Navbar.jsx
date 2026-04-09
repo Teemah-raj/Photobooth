@@ -1,23 +1,31 @@
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Home, Settings, Camera, GalleryHorizontal } from 'lucide-react';
 
 function Navbar() {
+  const location = useLocation();
+
+  const navItems = [
+    { path: '/', icon: <Home />, label: 'Home' },
+    { path: '/themes', icon: <Settings />, label: 'Themes' },
+    { path: '/booth', icon: <Camera />, label: 'Booth' },
+    { path: '/gallery', icon: <GalleryHorizontal />, label: 'Gallery' },
+  ];
+
   return (
-    <nav style={styles.nav}>
-      <Link to="/">Home</Link>
-      <Link to="/booth">Booth</Link>
-      <Link to="/themes">Themes</Link>
-      <Link to="/gallery">Gallery</Link>
+    <nav className="bottom-navbar">
+      {navItems.map(item => (
+        <Link
+          key={item.path}
+          to={item.path}
+          className={`nav-item ${location.pathname === item.path ? 'active' : ''}`}
+        >
+          {item.icon}
+          <span className="nav-label">{item.label}</span>
+        </Link>
+      ))}
     </nav>
   );
 }
-
-const styles = {
-  nav: {
-    display: "flex",
-    gap: "20px",
-    justifyContent: "center",
-    marginTop: "20px",
-  },
-};
 
 export default Navbar;

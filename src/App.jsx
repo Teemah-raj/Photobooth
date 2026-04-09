@@ -1,23 +1,35 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import HomeScreen from "./HomeScreen";
-import BoothScreen from "./BoothScreen";
-import CameraScreen from "./CameraScreen";
-// import ThemesScreen from "./ThemesScreen";
-import GalleryScreen from "./GalleryScreen";
+import React, { useState } from 'react';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import HomeScreen from './HomeScreen';
+import ThemesScreen from './ThemesScreen';
+import CameraScreen from './CameraScreen';
+import GalleryScreen from './GalleryScreen';
+import Navbar from './Navbar';
+import './App.css';
 
 function App() {
+  const [settings, setSettings] = useState({
+    photos: 4,
+    timer: 3,
+    format: 'Portrait',
+    theme: 'Vintage'
+  });
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomeScreen />} />
-        <Route path="/booth" element={<BoothScreen />} />
-        <Route path="/camera" element={<CameraScreen />} />
-        {/* <Route path="/themes" element={<ThemesScreen />} /> */}
-        <Route path="/gallery" element={<GalleryScreen />} />
-      </Routes>
-    </BrowserRouter>
+    <Router>
+      <div className="app-container">
+        <main className="main-content">
+          <Routes>
+            <Route path="/" element={<HomeScreen settings={settings} setSettings={setSettings} />} />
+            <Route path="/themes" element={<ThemesScreen settings={settings} setSettings={setSettings} />} />
+            <Route path="/booth" element={<CameraScreen settings={settings} />} />
+            <Route path="/gallery" element={<GalleryScreen />} />
+          </Routes>
+        </main>
+        <Navbar />
+      </div>
+    </Router>
   );
 }
 
 export default App;
-
